@@ -297,6 +297,24 @@ rec {
 
   hasNoBinOutput = drv: overrideCabal drv (drv: { enableSeparateBinOutput = false; });
 
+  /* Some packages have a redundant Paths_* module in other-modules, causing
+     cyclic references.
+
+     Usually these were put there by hpack.
+
+     If the Paths_* module was not redundant, recent GHC will emit a warning
+     but will probably succeed because of inlining.
+   */
+  omitPathsModule = drv: overrideCabal drv (drv: {
+    preConfigure = drv.preConfigure or "" + ''
+      sed -e s/${pathsModuleFromPackageName drv.pname}//g -i *.cabal
+    '';
+  });
+
+  /* Determine the name of the Paths module for the package.
+   */
+  pathsModuleFromPackageName = pname: "Paths_${builtins.replaceStrings ["-"] ["_"] pname}";
+
   # Extract the haskell build inputs of a haskell package.
   # This is useful to build environments for developing on that
   # package.

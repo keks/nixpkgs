@@ -166,7 +166,7 @@ self: super: builtins.intersectAttrs super {
   });
 
   # These packages try to access the network.
-  amqp = dontCheck super.amqp;
+  amqp = dontCheck (hasNoBinOutput super.amqp);
   amqp-conduit = dontCheck super.amqp-conduit;
   bitcoin-api = dontCheck super.bitcoin-api;
   bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
@@ -520,18 +520,53 @@ self: super: builtins.intersectAttrs super {
   H = hasNoBinOutput super.H;
   cryptol = hasNoBinOutput super.cryptol;
   hscolour = hasNoBinOutput super.hscolour;
-  sproxy = hasNoBinOutput super.sproxy;
-  sproxy2 = hasNoBinOutput super.sproxy2;
-  sproxy-web = hasNoBinOutput super.sproxy-web;
   juandelacosa = hasNoBinOutput super.juandelacosa;
   mywatch = hasNoBinOutput super.mywatch;
+  propellor = hasNoBinOutput super.propellor;
+  sproxy = hasNoBinOutput super.sproxy;
+  sproxy-web = hasNoBinOutput super.sproxy-web;
+  sproxy2 = hasNoBinOutput super.sproxy2;
   sugarhaskell = hasNoBinOutput super.sugarhaskell;
+  uuagc-bootstrap = hasNoBinOutput super.uuagc-bootstrap;
+  uuagc = hasNoBinOutput super.uuagc;
   zerobin = hasNoBinOutput super.zerobin;
 
   git-annex = overrideCabal super.git-annex (drv: {
     enableSeparateBinOutput = false;
     enableSeparateEtcOutput = false;
   });
+
+  # Omit Paths module from packages that don't need it, to avoid
+  # creating unused cyclic references.
+  # It is typically eliminated by the inliner anyway.
+  Learning = omitPathsModule super.Learning;
+  anansi = omitPathsModule super.anansi;
+  autoexporter = omitPathsModule super.autoexporter;
+  cheapskate = omitPathsModule super.cheapskate;
+  choose-exe = omitPathsModule super.choose-exe;
+  distributed-process-p2p = omitPathsModule super.distributed-process-p2p;
+  doctest = omitPathsModule super.doctest;
+  drawille = omitPathsModule super.drawille;
+  freer-simple = omitPathsModule super.freer-simple;
+  ghcid = omitPathsModule super.ghcid;
+  gpio = omitPathsModule super.gpio;
+  hackage-db = omitPathsModule super.hackage-db;
+  highlighting-kate = omitPathsModule super.highlighting-kate;
+  hpc-coveralls = omitPathsModule super.hpc-coveralls;
+  kawa = omitPathsModule super.kawa;
+  mameya = omitPathsModule super.mameya;
+  markdown-unlit = omitPathsModule super.markdown-unlit;
+  mios = omitPathsModule super.mios;
+  perfect-hash-generator = omitPathsModule super.perfect-hash-generator;
+  ploton = omitPathsModule super.ploton;
+  pretty-terminal = omitPathsModule super.pretty-terminal;
+  raaz = omitPathsModule super.raaz;
+  shellcheck = omitPathsModule super.shellcheck;
+  shellout = omitPathsModule super.shellout;
+  slate = omitPathsModule super.slate;
+  snap-server = omitPathsModule super.snap-server;
+  tasty-discover = omitPathsModule super.tasty-discover;
+  titlecase = omitPathsModule super.titlecase;
 
   # Has extra data files which are referred to from the binary output,
   # creating a store reference cycle. Putting data in separate output
