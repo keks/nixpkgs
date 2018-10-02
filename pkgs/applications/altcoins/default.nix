@@ -90,5 +90,5 @@ rec {
 
   particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; withGui = false; };
 
-  beam-mw = callPackage ./beam-mw.nix { boost = boost165; };
+  beam-mw = libsForQt5.callPackage ./beam-mw.nix { boost = boost165; };
 }
