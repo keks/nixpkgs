@@ -5,7 +5,6 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "beam-mw" + "-" + version;
-  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "beam-mw";
